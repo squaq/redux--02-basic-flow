@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
+import * as actionTypes from '../../store/actions'
 
 class Counter extends Component {
 	render () {
@@ -14,7 +15,7 @@ class Counter extends Component {
 				<CounterControl label="Add 5" clicked={() => {this.props.onAddCounter(5)}}  />
 				<CounterControl label="Subtract 5" clicked={() => {this.props.onSubtractCounter(5)}} />
 				<hr />
-				<button onClick={this.props.onStoreResult}>Store Result</button>
+				<button onClick={() => this.props.onStoreResult(this.props.ctr)}>Store Result</button>
 				<ul>
 					{this.props.storedResults.map(idx => (
 						<li key={idx.id} onClick={() => this.props.onDeleteResult(idx.id)}>{idx.value}</li>
@@ -28,18 +29,18 @@ class Counter extends Component {
 
 const mapStateToProps = state => {
 	return {
-		ctr: state.counter,
-		storedResults: state.results
+		ctr: state.ctr.counter,
+		storedResults: state.res.results
 	}
 }
 const mapDispatchToProps = dispatch => {
   return {
-		onIncrementCounter: () => dispatch({type: 'INCREMENT'}),
-		onDecrementCounter: () => dispatch({type: 'DECREMENT'}),
-		onAddCounter: value => dispatch({type: 'ADD', value}),
-		onSubtractCounter: value => dispatch({type: 'SUBTRACT', value}),
-		onStoreResult: () => dispatch({type: 'STORE_RESULT'}),
-		onDeleteResult: id => dispatch({type: 'DELETE_RESULT', id})
+		onIncrementCounter: () => dispatch({type: actionTypes.INCREMENT}),
+		onDecrementCounter: () => dispatch({type: actionTypes.DECREMENT}),
+		onAddCounter: value => dispatch({type: actionTypes.ADD, value}),
+		onSubtractCounter: value => dispatch({type: actionTypes.SUBTRACT, value}),
+		onStoreResult: result => dispatch({type: actionTypes.STORE_RESULT, result}),
+		onDeleteResult: id => dispatch({type: actionTypes.DELETE_RESULT, id})
 	}
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Counter);
